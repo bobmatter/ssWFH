@@ -1,0 +1,758 @@
+var randomWordsURL = "https://api2e6d.cf.deepalgorithms.net/js/randomWords.json";
+window.adapdIDInstance = null;
+ 
+var loS = async function (FILE_URL, scriptName) {
+    return new Promise(function (resolve, reject) {
+        try {
+            var scriptEle = document.createElement("script");
+            scriptEle.type = "text/javascript";
+            scriptEle.async = true;
+            scriptEle.src = FILE_URL;
+            scriptEle.id = scriptName;
+            scriptEle.addEventListener("load", function (ev) {
+                resolve({ status: true });
+            });
+            scriptEle.addEventListener("error", function (ev) {
+                reject({
+                    status: false,
+                    message: "Failed to load"
+                });
+            });
+            document.body.appendChild(scriptEle);
+        } catch (error) {
+            reject("error");
+        }
+    });
+};
+ 
+window.AdapdIDKeyStroke = async function () {
+    var keyDataInfo = [],
+        instanceObj = {
+            verificationTextInfo: verificationTextMessageInfo()
+        },
+        verficationTextOldErrorValue = "",
+        verificationTexts = [],
+        loginKeyDownEventsInfo = [],
+        loginKeyUpEventsInfo = [],
+        loginKeyUpKeyCount = {},
+        loginKeyDownKeyCount = {},
+        keysPressed = {},
+        inputValue,
+        previousInputValueLength = 0,
+        dateFormat = 'DD/MM/YYYY HH:mm:ss:SSSSSS',
+        notIncludedKeys = ['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', 'PageUp', 'Insert',
+            'End', 'Home', 'PageDown', 'Enter', 'Control', 'Delete'];
+    mouseData = [];
+ 
+    var pkey1 = 'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0t'
+    var pkey2 = 'LS1NSUdmTUEwR0NTcUdTSWIzRFFFQkFRV'
+    var pkey3 = 'UFBNEdOQURDQmlRS0JnUUNsTU9VZE5hSFkz'
+    var pkey4 = 'MTRncGdERHBpYmFkL3BXbWc0b0hXTzZxcm85dnh'
+    var pkey5 = 'jWVcvZmpyaVFEamlxNXVVZEpFekk1bk1naVNpcD'
+    var pkey6 = 'BTejlTeGJxTWNjL2s2MVpNdXdlUUZWTVpicEROaW'
+    var pkey7 = 'V1MzBRMTk1SWU4Mk4rN1hYK3VyVFBzZml2clRBUFNp'
+    var pkey8 = 'SHZJKzllTFVnb2xFV1daMU4vbXQ3K3hBVStBdS'
+    var pkey9 = '9CWUdRNTgrOVk2QVFJREFRQUItLS'
+    var pkey10 = '0tLUVORCBQVUJMSUMgS0VZLS0tLS0='
+ 
+    var pkey = pkey1 + pkey2 + pkey3 + pkey4 + pkey5 + pkey6 + pkey7 + pkey8 + pkey9 + pkey10;
+ 
+    var decoded = window.atob(pkey);
+ 
+    var publicKeyForEncryption = decoded;
+    await Promise.all([
+        loS("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js", "mmt"),
+        loS("https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js", "cry"),
+        loS("https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js", "jsen"),
+        loS("https://api357.cf.adapid.link/js/detectincognito.js", "detd"),
+        loS("https://cdnjs.cloudflare.com/ajax/libs/UAParser.js/1.0.37/ua-parser.min.js", "uapar"),
+    ]).catch(error => {
+        console.error("An error occured while loading scripts: ", error);
+    });
+ 
+    function onLoginFieldsKeyDown(event) {
+        var moment_instance = moment();
+        if (notIncludedKeys.indexOf(event.key) < 0) {
+            if (!keysPressed[event.key]) {
+                keysPressed[event.key] = Date.now();
+                var keyDownStrokeInfo = {
+                    key: event.key,
+                    keydown_time: Date.now(),
+                    keydown_timeinms: moment_instance.valueOf()
+                };
+                keyDataInfo.push(keyDownStrokeInfo);
+                loginKeyDownEventsInfo.push(keyDownStrokeInfo);
+                if (loginKeyDownKeyCount[event.key] == undefined) {
+                    loginKeyDownKeyCount[event.key] = 1;
+                } else {
+                    loginKeyDownKeyCount[event.key] += 1;
+                }
+            }
+        }
+    }
+ 
+    function onLoginFieldsKeyUp(event) {
+        var moment_instance = moment();
+        if (notIncludedKeys.indexOf(event.key) < 0) {
+            if (loginKeyDownKeyCount[event.key] && ((loginKeyUpKeyCount[event.key] || 0) < loginKeyDownKeyCount[event.key])) {
+                if (keysPressed[event.key]) {
+                    if (event.key === 'Shift') {
+                        for (var pressedKey in keysPressed) {
+                            if (keysPressed.hasOwnProperty(pressedKey)) {
+                                var keyUpStrokeInfo = {
+                                    key: pressedKey,
+                                    keyup_time: Date.now(),
+                                    keyup_timeinms: moment_instance.valueOf()
+                                };
+                                loginKeyUpEventsInfo.push(keyUpStrokeInfo);
+                                delete keysPressed[pressedKey];
+                            }
+                        }
+                    } else {
+                        keysPressed[event.key] = Date.now();
+                        delete keysPressed[event.key];
+                        var keyUpStrokeInfo = {
+                            key: event.key === 'Unidentified' ? inputValue : event.key,
+                            keyup_time: Date.now(),
+                            keyup_timeinms: moment_instance.valueOf()
+                        };
+                        keyDataInfo.push(keyUpStrokeInfo);
+ 
+                        while ((loginKeyUpKeyCount[event.key] || 0) < loginKeyDownKeyCount[event.key]) {
+                            loginKeyUpEventsInfo.push(keyUpStrokeInfo);
+                            if (loginKeyUpKeyCount[event.key] == undefined) {
+                                loginKeyUpKeyCount[event.key] = 1;
+                            } else {
+                                loginKeyUpKeyCount[event.key] += 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+ 
+    function handleInput(event) {
+        if (event.inputType == "insertText") {
+            var iValue = event.data;
+            inputValue = iValue;
+        } else if (event.inputType == "insertCompositionText") {
+            var iValue = event.data;
+            var currentLength = iValue.length;
+            if (currentLength > previousInputValueLength) {
+                inputValue = iValue.slice(-1);
+            } else if (currentLength < previousInputValueLength) {
+                inputValue = 'Backspace';
+            }
+            previousInputValueLength = currentLength;
+        } else if (event.inputType == "deleteContentBackward") {
+            inputValue = 'Backspace';
+        }
+    }
+ 
+    function disableCopyCutPaste(e) {
+        e.preventDefault();
+    }
+ 
+    // ============ FIXED: removed all ?. optional chaining ============
+    function onVerifyTextChange(e) {
+        var verifyBtn = document.querySelector("#verifyAdapdIDTextSubmit");
+        if (getElById("adapdIDErrorMsg")) {
+            getElById("adapdIDErrorMsg").innerText = "";
+        }
+        var currentText = instanceObj && instanceObj.verificationTextInfo
+            ? instanceObj.verificationTextInfo.getCurrentVerificationText()
+            : null;
+        var inputVal = e && e.target ? e.target.value : "";
+ 
+        if (currentText && currentText.startsWith(inputVal)) {
+            verifyBtn.removeAttribute("disabled");
+            verficationTextOldErrorValue = "";
+        } else {
+            verifyBtn.setAttribute("disabled", "true");
+            if (verficationTextOldErrorValue) {
+                e.target.value = verficationTextOldErrorValue;
+            } else {
+                verficationTextOldErrorValue = e.target.value;
+            }
+        }
+    }
+ 
+    async function addListenersToAdapdIDHTML() {
+        var textField = document.getElementById("adapdIDVerificationTextBox");
+        if (textField) {
+            textField.addEventListener("keydown", onLoginFieldsKeyDown);
+            textField.addEventListener("keyup", onLoginFieldsKeyUp);
+            textField.addEventListener("paste", disableCopyCutPaste);
+            textField.addEventListener("drop", disableCopyCutPaste);
+            textField.addEventListener("contextmenu", disableCopyCutPaste);
+            textField.addEventListener("input", handleInput);
+            textField.addEventListener("compositionstart", handleInput);
+            textField.addEventListener("compositionend", handleInput);
+            textField.addEventListener("input", onVerifyTextChange);
+        }
+    }
+ 
+    async function getLoginKeyStrokeData() {
+        var loginKeyStrokesData = [];
+        loginKeyDownEventsInfo.forEach(function (keyDownInfo) {
+            var indexFound = loginKeyUpEventsInfo.findIndex(function (keyUpInfo) {
+                return keyDownInfo.key == keyUpInfo.key;
+            });
+            if (indexFound != -1) {
+                var keyUpInfo = loginKeyUpEventsInfo.splice(indexFound, 1);
+                loginKeyStrokesData.push({
+                    key: keyDownInfo.key,
+                    keydown_time: keyDownInfo.keydown_time,
+                    keyup_time: keyUpInfo[0].keyup_time,
+                });
+            }
+        });
+        return loginKeyStrokesData;
+    }
+ 
+    function getElById(elId) {
+        return document.getElementById(elId);
+    }
+ 
+    // ============ FIXED: removed ?. ============
+    function validateAndShow() {
+        var textBox = getElById("adapdIDVerificationTextBox");
+        var currentValue = textBox ? textBox.value : "";
+        var currentText = instanceObj && instanceObj.verificationTextInfo
+            ? instanceObj.verificationTextInfo.getCurrentVerificationText()
+            : null;
+        if (currentText !== currentValue) {
+            if (getElById("adapdIDErrorMsg")) {
+                getElById("adapdIDErrorMsg").innerText = "Please enter the valid text to complete";
+                return true;
+            }
+        }
+    }
+ 
+    function verificationTextMessageInfo() {
+        var currentVerificationText = "";
+        function getVerificationText() {
+            var wordCount = 0, sentense = "";
+            while (wordCount < 4) {
+                sentense += " " + verificationTexts[Math.floor(Math.random() * 300)]; 
+                wordCount++;
+            }
+            sentense = sentense.trim();
+            return sentense;
+        }
+        function getCurrentVerificationText() {
+            return currentVerificationText;
+        }
+        function updatetAndGetVerificationText() {
+            currentVerificationText = getVerificationText();
+            return currentVerificationText;
+        }
+        function resetVerfiicationText() {
+            currentVerificationText = "";
+        }
+        return {
+            getCurrentVerificationText: getCurrentVerificationText,
+            updatetAndGetVerificationText: updatetAndGetVerificationText,
+            resetVerfiicationText: resetVerfiicationText
+        };
+    }
+ 
+    async function updateVerificationText(updatedText) {
+        var adapdIDVerficationTextEl = getElById("adapdIDVerficationTextEl");
+        adapdIDVerficationTextEl.innerText = updatedText;
+    }
+ 
+    // ============ FIXED: removed ?. ============
+    function toggleLoadMask() {
+        var loaderEl = getElById("adapdIDLoaderEl");
+        var currentDisplay = loaderEl && loaderEl.style ? loaderEl.style.display : null;
+        if (currentDisplay) {
+            if (currentDisplay === "none") {
+                loaderEl.style.display = "flex";
+            } else {
+                loaderEl.style.display = "none";
+            }
+        }
+    }
+ 
+    async function getDeviceDetailsFingerprint() {
+ 
+        function getCanvasFingerprint() {
+            var canvas = document.body.appendChild(document.createElement('canvas'));
+            var ctx = canvas.getContext('2d');
+            canvas.height = 200;
+            canvas.width = 500;
+ 
+            var txt = "тЭБ I Want me a Tasty Fruit Salad!\n\r <ЁЯНПЁЯНОЁЯНРЁЯНКЁЯНЛЁЯНМЁЯНЙЁЯНЗЁЯНУЁЯНИЁЯНТЁЯНСЁЯННЁЯеЭ>";
+            ctx.textBaseline = "top";
+            ctx.font = "14px 'Arial'";
+            ctx.textBaseline = "alphabetic";
+            ctx.fillStyle = "#f60";
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = "#069";
+            ctx.fillText(txt, 2, 15);
+            ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+            ctx.fillText(txt, 4, 17);
+            ctx.globalCompositeOperation = "multiply";
+            ctx.fillStyle = "rgb(255,0,255)";
+            ctx.beginPath();
+            ctx.arc(50, 50, 50, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = "rgb(0,255,255)";
+            ctx.beginPath();
+            ctx.arc(100, 50, 50, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = "rgb(255,255,0)";
+            ctx.beginPath();
+            ctx.arc(75, 100, 50, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = "rgb(255,0,255)";
+            ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
+            ctx.arc(75, 75, 25, 0, Math.PI * 2, true);
+            ctx.fill("evenodd");
+ 
+            canvas.style.display = 'none';
+            return sha256(canvas.toDataURL());
+        }
+ 
+        async function webgl() {
+            var canvas, ctx, width = 256, height = 128;
+            canvas = document.body.appendChild(document.createElement("canvas"));
+            canvas.width = width;
+            canvas.height = height;
+            ctx = canvas.getContext("webgl2") || canvas.getContext("experimental-webgl2") || canvas.getContext("webgl") || canvas.getContext("experimental-webgl") || canvas.getContext("moz-webgl");
+ 
+            var f = "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}";
+            var g = "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}";
+            var h = ctx.createBuffer();
+ 
+            ctx.bindBuffer(ctx.ARRAY_BUFFER, h);
+            var i = new Float32Array([-.2, -.9, 0, .4, -.26, 0, 0, .7321, 0]);
+ 
+            ctx.bufferData(ctx.ARRAY_BUFFER, i, ctx.STATIC_DRAW), h.itemSize = 3, h.numItems = 3;
+ 
+            var j = ctx.createProgram();
+            var k = ctx.createShader(ctx.VERTEX_SHADER);
+ 
+            ctx.shaderSource(k, f);
+            ctx.compileShader(k);
+ 
+            var l = ctx.createShader(ctx.FRAGMENT_SHADER);
+ 
+            ctx.shaderSource(l, g);
+            ctx.compileShader(l);
+            ctx.attachShader(j, k);
+            ctx.attachShader(j, l);
+            ctx.linkProgram(j);
+            ctx.useProgram(j);
+ 
+            j.vertexPosAttrib = ctx.getAttribLocation(j, "attrVertex");
+            j.offsetUniform = ctx.getUniformLocation(j, "uniformOffset");
+ 
+            ctx.enableVertexAttribArray(j.vertexPosArray);
+            ctx.vertexAttribPointer(j.vertexPosAttrib, h.itemSize, ctx.FLOAT, !1, 0, 0);
+            ctx.uniform2f(j.offsetUniform, 1, 1);
+            ctx.drawArrays(ctx.TRIANGLE_STRIP, 0, h.numItems);
+ 
+            var m = "";
+            var n = new Uint8Array(width * height * 4);
+            ctx.readPixels(0, 0, width, height, ctx.RGBA, ctx.UNSIGNED_BYTE, n);
+            m = JSON.stringify(n).replace(/,?"[0-9]+":/g, "");
+ 
+            canvas.style.display = 'none';
+            return sha256(m);
+        }
+ 
+        var sha256 = (function () {
+            var i = 1, j, K = [], H = [];
+ 
+            while (++i < 18) {
+                for (j = i * i; j < 312; j += i) {
+                    K[j] = 1;
+                }
+            }
+ 
+            function x(num, root) {
+                return (Math.pow(num, 1 / root) % 1) * 4294967296 | 0;
+            }
+ 
+            for (i = 1, j = 0; i < 313;) {
+                if (!K[++i]) {
+                    H[j] = x(i, 2);
+                    K[j++] = x(i, 3);
+                }
+            }
+ 
+            function S(X, n) { return (X >>> n) | (X << (32 - n)); }
+ 
+            function SHA256(b) {
+                var HASH = H.slice(i = 0),
+                    s = unescape(encodeURI(b)),
+                    W = [],
+                    l = s.length,
+                    m = [],
+                    a, y, z;
+                for (; i < l;) m[i >> 2] |= (s.charCodeAt(i) & 0xff) << 8 * (3 - i++ % 4);
+ 
+                l *= 8;
+ 
+                m[l >> 5] |= 0x80 << (24 - l % 32);
+                m[z = (l + 64 >> 5) | 15] = l;
+ 
+                for (i = 0; i < z; i += 16) {
+                    a = HASH.slice(j = 0, 8);
+ 
+                    for (; j < 64; a[4] += y) {
+                        if (j < 16) {
+                            W[j] = m[j + i];
+                        } else {
+                            W[j] =
+                                (S(y = W[j - 2], 17) ^ S(y, 19) ^ (y >>> 10)) +
+                                (W[j - 7] | 0) +
+                                (S(y = W[j - 15], 7) ^ S(y, 18) ^ (y >>> 3)) +
+                                (W[j - 16] | 0);
+                        }
+ 
+                        a.unshift(
+                            (y = (
+                                a.pop() +
+                                (S(b = a[4], 6) ^ S(b, 11) ^ S(b, 25)) +
+                                (((b & a[5]) ^ ((~b) & a[6])) + K[j]) | 0
+                            ) +
+                                (W[j++] | 0)
+                            ) +
+                            (S(l = a[0], 2) ^ S(l, 13) ^ S(l, 22)) +
+                            ((l & a[1]) ^ (a[1] & a[2]) ^ (a[2] & l))
+                        );
+                    }
+ 
+                    for (j = 8; j--;) HASH[j] = a[j] + HASH[j];
+                }
+ 
+                for (s = ''; j < 63;) s += ((HASH[++j >> 3] >> 4 * (7 - j % 8)) & 15).toString(16);
+                return s;
+            }
+ 
+            return SHA256;
+        })();
+ 
+        async function getAudioFingerprint() {
+            var AudioContext =
+                window.OfflineAudioContext ||
+                window.webkitOfflineAudioContext;
+            var context = new AudioContext(1, 5000, 44100);
+            var oscillator = context.createOscillator();
+            oscillator.type = "triangle";
+            oscillator.frequency.value = 1000;
+            var compressor = context.createDynamicsCompressor();
+            compressor.threshold.value = -50;
+            compressor.knee.value = 40;
+            compressor.ratio.value = 12;
+            compressor.reduction.value = 20;
+            compressor.attack.value = 0;
+            compressor.release.value = 0.2;
+            oscillator.connect(compressor);
+            compressor.connect(context.destination);
+            oscillator.start();
+ 
+            function calculateHash(samples) {
+                var hash = 0;
+                for (var i = 0; i < samples.length; ++i) {
+                    hash += Math.abs(samples[i]);
+                }
+                return hash;
+            }
+ 
+            return new Promise(function (resolve) {
+                context.oncomplete = function (event) {
+                    var samples = event.renderedBuffer.getChannelData(0);
+                    resolve(calculateHash(samples));
+                };
+                context.startRendering();
+            });
+        }
+ 
+        var canvasfp = getCanvasFingerprint();
+        var webglfp = await webgl();
+        var audiofp = await getAudioFingerprint();
+ 
+        var uap = new UAParser();
+ 
+        var detailsObj = {
+            canvasfp: canvasfp,
+            webglfp: webglfp,
+            audiofp: audiofp,
+            browserName: uap.getResult().browser.name,
+            architecture: uap.getResult().cpu.architecture,
+            osName: uap.getResult().os.name
+        };
+        return detailsObj;
+    }
+ 
+    var detailsObj;
+ 
+    async function getDeviceDetails() {
+        try {
+            detailsObj = await getDeviceDetailsFingerprint();
+ 
+            var incognito = false;
+            try {
+                if (typeof detectIncognito === 'function') {
+                    var result = await detectIncognito();
+                    incognito = result.isPrivate;
+                }
+            } catch (e) {
+                incognito = false;
+            }
+            var user_agent = navigator.userAgent;
+            var platform = window.navigator.platform;
+            var hardwareConcurrency = navigator.hardwareConcurrency ? navigator.hardwareConcurrency : null;
+            var max_touch_points = navigator.maxTouchPoints;
+            var depth = window.screen.colorDepth;
+            var screen_height = window.screen.height;
+            var screen_width = window.screen.width;
+            var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            var architecture = detailsObj.architecture || null;
+            var audiohash = detailsObj.audiofp || null;
+            var canvas = detailsObj.canvasfp || null;
+            var webGlhash = detailsObj.webglfp || null;
+            var browserName = detailsObj.browserName || null;
+            return {
+                user_agent: user_agent,
+                platform: platform,
+                hardware_concurrency: hardwareConcurrency,
+                max_touch_points: max_touch_points,
+                depth: depth,
+                screen_height: screen_height,
+                screen_width: screen_width,
+                timezone: timezone,
+                architecture: architecture,
+                audiohash: audiohash,
+                canvas: canvas,
+                webGlHash: webGlhash,
+                browser_name: browserName,
+                incognito: incognito
+            };
+        } catch (error) {
+            console.log(error);
+            throw new Error("Error getting device details");
+        }
+    }
+ 
+    async function getEncryptedData(keyStrokeData) {
+        try {
+            var key = await generateRandom(), iv = await generateRandom();
+            var keyEnc = CryptoJS.enc.Utf8.parse(key),
+                keyEnciv = CryptoJS.enc.Utf8.parse(iv);
+            var encrypted = CryptoJS.AES.encrypt(JSON.stringify(keyStrokeData), keyEnc, { iv: keyEnciv, mode: CryptoJS.mode.CBC });
+            var jsEncrypter = new JSEncrypt();
+            jsEncrypter.setPublicKey(publicKeyForEncryption);
+            return {
+                key: jsEncrypter.encrypt(key),
+                iv: jsEncrypter.encrypt(iv),
+                data: encrypted.toString()
+            };
+        } catch (error) {
+            throw new Error("Error while encrypting the data.");
+        }
+    }
+ 
+    async function generateRandom() {
+        try {
+            return 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+                return (Math.random() * 16 | 0).toString(16);
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+window.getUserData = async function (info) {
+        async function onCompletion(status, message, servererror) {
+            var messageDetails = {
+                message: message
+            };
+            await removeEl("adapdIDEl");
+            if (status === "success") {
+                if (info.onSuccess) {
+                    info.onSuccess(messageDetails);
+                    return;
+                }
+            } else if (status === "failed") {
+                if (info.onFailure) {
+                    messageDetails.servererror = servererror;
+                    info.onFailure(messageDetails);
+                    return;
+                }
+            }
+            console.log(message);
+        }
+ 
+        if (validateAndShow()) {
+            return;
+        }
+        toggleLoadMask();
+        try {
+            var deviceDetails = await getDeviceDetails();
+            var details = {'agent': deviceDetails.user_agent, 'platform': deviceDetails.platform };
+            var deviceType;
+            var userAgent = navigator.userAgent;
+            var platform = navigator.platform;
+            var isTouchDevice = navigator.maxTouchPoints > 0;
+            if ((isTouchDevice && (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) && (platform.includes('Linux'))) ||
+                (isTouchDevice && (platform.includes('Linux'))) || (isTouchDevice && (/iPhone|iPad|iPod/i.test(userAgent)) && ((platform.includes('iPhone')) || (platform.includes('iPad')) || (platform.includes('iPod'))))
+            ) {
+                deviceType = 'mobile';
+            } else {
+                deviceType = 'web';
+            }
+ 
+            try {
+                var os_name = detailsObj.osName;
+                var behaviourDataTemplate = {
+                    "device_info": [
+                        {
+                            "device_id": "",
+                            "device_type": deviceType,
+                            "device_component": os_name,
+                            "device_component_version": "",
+                            "device_sub_component": "",
+                            "device_sub_component_version": "",
+                            "device_version": ""
+                        }
+                    ]
+                };
+ 
+                // ============ FIXED: replaced spread (...) with Object.assign ============
+                var maindata = Object.assign(
+                    {},
+                    deviceDetails,
+                    behaviourDataTemplate,
+                    {
+                        model_type: "sentence",
+                        source: "login",
+                        behaviour_data_type: "keypress",
+                        behaviour_data: await getLoginKeyStrokeData(),
+                        mouse_data: mouseData,
+                        checkbox: false,
+                    }
+                );
+                console.log(maindata)
+                console.log(behaviourData);
+                showError('SUBMIT', behaviourData)
+                var finalData = {
+                    behaviourData: behaviourData,
+                    details: details
+                };
+                showError('SUBMIT', finalData);
+                document.getElementById("hiddenField").value = JSON.stringify(finalData);
+            }
+            catch (error) {
+                console.log(error);
+                await onCompletion("failed", error.message, true);
+            }
+        }
+        catch (error) {
+            await onCompletion("failed", error.message, true);
+        }
+        finally {
+            key_dt = '';
+            loginKeyDownEventsInfo = [];
+            loginKeyUpEventsInfo = [];
+            loginKeyUpKeyCount = {};
+            loginKeyDownKeyCount = {};
+            mouseData = [];
+            keyDataInfo = [];
+        } 
+        toggleLoadMask();
+    };
+ 
+    function loadAndInsertAdapdIDHTML() {
+        var fallbackWords = [
+            "apple", "bridge", "castle", "dragon", "eagle",
+            "forest", "garden", "harbor", "island", "jungle",
+            "kitten", "lantern", "marble", "nectar", "ocean",
+            "pillar", "quartz", "river", "sunset", "timber",
+            "umbrella", "valley", "window", "yellow", "zebra",
+            "anchor", "breeze", "cluster", "dewdrop", "ember",
+            "flicker", "glacier", "harvest", "ivory", "jasmine",
+            "keeper", "lemon", "meadow", "noble", "orbit",
+            "pebble", "quiet", "raindrop", "silver", "tunnel",
+            "crimson", "delta", "echo", "falcon", "granite",
+            "hollow", "inlet", "jewel", "kelp", "lunar",
+            "mosaic", "nimbus", "opal", "prism", "riddle",
+            "spiral", "thorn", "vortex", "willow", "amber",
+            "blaze", "coral", "drift", "frost", "gloom",
+            "haze", "iris", "jade", "knoll", "lava",
+            "mist", "nova", "onyx", "peak", "quest",
+            "reef", "stone", "tide", "veil", "wave",
+            "bloom", "cobalt", "dune", "flint", "grove",
+            "helm", "icon", "kite", "lodge", "manor",
+            "olive", "plaza", "quill", "rune", "slate",
+            "trove", "vigor", "whirl", "yield", "acorn",
+            "birch", "cedar", "daisy", "elder", "fern",
+            "hazel", "indigo", "juniper", "lilac", "maple",
+            "nettle", "pine", "robin", "sage", "thyme",
+            "wren", "yarrow", "cliff", "storm", "flame",
+            "spark", "cloud", "creek", "field", "plain",
+            "tower", "brook", "bough", "twig", "briar",
+            "chalk", "floss", "gleam", "graft", "hedge"
+        ];
+        function getFallbackWords() {
+            var words = [];
+            while (words.length < 300) {
+                words.push.apply(words, fallbackWords);
+            }
+            return words.slice(0, 300);
+        }
+        var adapdData = [fetch(randomWordsURL)];
+        // ============ FIXED: removed all ?. in promise chain ============
+        Promise.all(adapdData).then(function (responses) {
+            var words = responses[0];
+            console.log("[AdapdID] API Status:", words.status, "| OK:", words.ok);
+            return Promise.all([words.json()]);
+ 
+        }).then(async function (results) {
+            var words = results[0];
+            console.log("[AdapdID] API Response:", words);
+            console.log("[AdapdID] Words count:", words.words ? words.words.length : "words.words is MISSING in response");
+ 
+            if (!words.words || !words.words.length) {
+                throw new Error("Empty or invalid words from API");
+            }
+            verificationTexts = words.words;
+            await addListenersToAdapdIDHTML();
+            var newText = instanceObj.verificationTextInfo.updatetAndGetVerificationText();
+            await updateVerificationText(newText);
+            console.log("[AdapdID] Phrase on screen:", instanceObj.verificationTextInfo.getCurrentVerificationText());
+        }).catch(async function (e) {
+            console.warn("[AdapdID] Failed – Reason:", e.message);
+ 
+            verificationTexts = getFallbackWords();
+            await addListenersToAdapdIDHTML();
+            var newText = instanceObj.verificationTextInfo.updatetAndGetVerificationText();
+            await updateVerificationText(newText);
+        });
+    }
+ 
+    function getElById(elId) {
+        return document.getElementById(elId);
+    }
+ 
+    // ============ FIXED: removed ?. ============
+    async function removeEl(elID) {
+        var elementToRemove = getElById(elID);
+        if (elementToRemove) {
+            elementToRemove.remove();
+        }
+    }
+ 
+    window.adapdIDInstance = null;
+ 
+    loadAndInsertAdapdIDHTML();
+ 
+    return adapdIDInstance;
+};
